@@ -10,5 +10,6 @@ namespace LibraryManagementSystemAPI.Models
         public ICollection<Book> bookName { get; set; } 
         public DateOnly dateOfPublish { get; set; }
         public int Year { get; set; }
+     
     }
 }
