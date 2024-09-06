@@ -122,14 +122,5 @@ namespace LibraryManagementSystemAPI.Controllers
                 // Log(ex); // Example: _logger.LogError(ex, "An error occurred while issuing the book.");
                 return StatusCode(500, "An error occurred while issuing the book.");
             }
-        }
-
-
-
-
-
-
-
-
     }
 }
