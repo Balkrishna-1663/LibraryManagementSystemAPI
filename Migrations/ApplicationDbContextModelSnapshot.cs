@@ -24,13 +24,13 @@ namespace LibraryManagementSystemAPI.Migrations
 
             modelBuilder.Entity("BookReader", b =>
                 {
-                    b.Property<int>("ReaderId")
+                    b.Property<int>("ReaderUserId")
                         .HasColumnType("int");
 
                     b.Property<int>("booksId")
                         .HasColumnType("int");
 
-                    b.HasKey("ReaderId", "booksId");
+                    b.HasKey("ReaderUserId", "booksId");
 
                     b.HasIndex("booksId");
 
@@ -70,11 +70,11 @@ namespace LibraryManagementSystemAPI.Migrations
 
             modelBuilder.Entity("LibraryManagementSystemAPI.Models.MainAdmin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AdminId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
 
                     b.Property<string>("AdminName")
                         .IsRequired()
@@ -88,7 +88,7 @@ namespace LibraryManagementSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AdminId");
 
                     b.ToTable("MainAdmins");
                 });
@@ -118,11 +118,11 @@ namespace LibraryManagementSystemAPI.Migrations
 
             modelBuilder.Entity("LibraryManagementSystemAPI.Models.Reader", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -144,7 +144,11 @@ namespace LibraryManagementSystemAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
 
                     b.ToTable("Readers");
                 });
@@ -160,7 +164,7 @@ namespace LibraryManagementSystemAPI.Migrations
                     b.Property<int>("BookNameId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReaderNameId")
+                    b.Property<int>("ReaderNameUserId")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("ReturnDate")
@@ -170,7 +174,7 @@ namespace LibraryManagementSystemAPI.Migrations
 
                     b.HasIndex("BookNameId");
 
-                    b.HasIndex("ReaderNameId");
+                    b.HasIndex("ReaderNameUserId");
 
                     b.ToTable("Reports");
                 });
@@ -200,7 +204,7 @@ namespace LibraryManagementSystemAPI.Migrations
                 {
                     b.HasOne("LibraryManagementSystemAPI.Models.Reader", null)
                         .WithMany()
-                        .HasForeignKey("ReaderId")
+                        .HasForeignKey("ReaderUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -228,7 +232,7 @@ namespace LibraryManagementSystemAPI.Migrations
 
                     b.HasOne("LibraryManagementSystemAPI.Models.Reader", "ReaderName")
                         .WithMany()
-                        .HasForeignKey("ReaderNameId")
+                        .HasForeignKey("ReaderNameUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

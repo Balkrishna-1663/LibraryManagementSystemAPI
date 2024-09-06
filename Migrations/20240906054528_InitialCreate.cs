@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibraryManagementSystemAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace LibraryManagementSystemAPI.Migrations
                 name: "MainAdmins",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    AdminId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AdminName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -23,7 +23,7 @@ namespace LibraryManagementSystemAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MainAdmins", x => x.Id);
+                    table.PrimaryKey("PK_MainAdmins", x => x.AdminId);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,17 +45,18 @@ namespace LibraryManagementSystemAPI.Migrations
                 name: "Readers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Readers", x => x.Id);
+                    table.PrimaryKey("PK_Readers", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,12 +99,12 @@ namespace LibraryManagementSystemAPI.Migrations
                 name: "BookReader",
                 columns: table => new
                 {
-                    ReaderId = table.Column<int>(type: "int", nullable: false),
+                    ReaderUserId = table.Column<int>(type: "int", nullable: false),
                     booksId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookReader", x => new { x.ReaderId, x.booksId });
+                    table.PrimaryKey("PK_BookReader", x => new { x.ReaderUserId, x.booksId });
                     table.ForeignKey(
                         name: "FK_BookReader_Books_booksId",
                         column: x => x.booksId,
@@ -111,10 +112,10 @@ namespace LibraryManagementSystemAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookReader_Readers_ReaderId",
-                        column: x => x.ReaderId,
+                        name: "FK_BookReader_Readers_ReaderUserId",
+                        column: x => x.ReaderUserId,
                         principalTable: "Readers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -125,7 +126,7 @@ namespace LibraryManagementSystemAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookNameId = table.Column<int>(type: "int", nullable: false),
-                    ReaderNameId = table.Column<int>(type: "int", nullable: false),
+                    ReaderNameUserId = table.Column<int>(type: "int", nullable: false),
                     ReturnDate = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
@@ -138,10 +139,10 @@ namespace LibraryManagementSystemAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reports_Readers_ReaderNameId",
-                        column: x => x.ReaderNameId,
+                        name: "FK_Reports_Readers_ReaderNameUserId",
+                        column: x => x.ReaderNameUserId,
                         principalTable: "Readers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -161,9 +162,9 @@ namespace LibraryManagementSystemAPI.Migrations
                 column: "BookNameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reports_ReaderNameId",
+                name: "IX_Reports_ReaderNameUserId",
                 table: "Reports",
-                column: "ReaderNameId");
+                column: "ReaderNameUserId");
         }
 
         /// <inheritdoc />

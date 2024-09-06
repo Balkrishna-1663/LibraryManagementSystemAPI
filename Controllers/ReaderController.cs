@@ -82,19 +82,45 @@ namespace LibraryManagementSystemAPI.Controllers
             return Ok(toBook);
 
         }
-       // [Authorize]
+        // [Authorize]
         [HttpPost]
-        public async Task<IActionResult> IssueBook(int id, int UserId)
+        public async Task<IActionResult> IssueBook(int id, int userId)
         {
-            var Issuedbook=await context.Books.FindAsync(id);
-            var newuser = await context.Readers.FindAsync(UserId);
-          newuser.books.Add(Issuedbook);
-           
-            return Ok("book Issued");
+            try
+            {
+                // Find the book by its ID
+                var issuedBook = await context.Books.FindAsync(id);
+                if (issuedBook == null)
+                {
+                    return NotFound("Book not found.");
+                }
 
-        }
+                // Find the user by their ID
+                var user = await context.Readers.FindAsync(userId);
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
 
+ if (user.books == null)
+                {
+                    // Initialize the ICollection if it's null
+                    user.books = new List<Book>();
+                }
+                // Assuming newuser.books is a collection (e.g., List<Book>)
+                user.books.Add(issuedBook); // Use Add for collection; replace with correct navigation property
+                                            // Ensure the Books collection is not null
+               
+                // Save changes to the database
+                await context.SaveChangesAsync();
 
-
+                return Ok("Book issued successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (logging is preferred over rethrowing)
+                // Log(ex); // Example: _logger.LogError(ex, "An error occurred while issuing the book.");
+                return StatusCode(500, "An error occurred while issuing the book.");
+            }
     }
 }
